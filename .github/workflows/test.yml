@@ -1,0 +1,41 @@
+name: test github actions selfhosted runner
+
+# トリガー
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# GitHub Pagesに更新するためのGITHUB_TOKEN権限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Github Runnerのシェル
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # ビルドジョブ
+  build:
+    # ジョブに必要な定義
+    runs-on: [self-hosted, linux]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: runner status
+        run: |
+          echo ls -al: $(ls -al)
+          echo ---------------------------------------
+          echo pwd: $(pwd)
+          echo ---------------------------------------
+          echo lsb_release: $(lsb_release -a)
+          echo ---------------------------------------
+          echo ip address: $(ip a)
+          echo ---------------------------------------
+          echo uname -n: $(uname -n)
