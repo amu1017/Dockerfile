@@ -36,6 +36,9 @@ jobs:
           echo ---------------------------------------
           echo lsb_release: $(lsb_release -a)
           echo ---------------------------------------
-          echo ip address: $(ip a)
-          echo ---------------------------------------
           echo uname -n: $(uname -n)
+          echo ---------------------------------------
+          echo docker version: $(docker version)
+          echo ---------------------------------------
+          echo docker buildx version: $(docker buildx version)
+          echo ---------------------------------------
