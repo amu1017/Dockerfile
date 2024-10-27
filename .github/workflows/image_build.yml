@@ -1,9 +1,9 @@
-name: check_runner
+name: image build
 
 on:
-  #push:
-    #branches:
-      #- main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
