@@ -1,28 +1,19 @@
 name: check_runner
 
-# トリガー
 on:
   workflow_dispatch:
 
-# GitHub Pagesに更新するためのGITHUB_TOKEN権限
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions: write-all
 
-# Github Runnerのシェル
 defaults:
   run:
     shell: bash
 
 jobs:
-  # ビルドジョブ
   step:
-    # ジョブに必要な定義
     runs-on: [self-hosted, linux]
-
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v4
 
       - name: runner status
