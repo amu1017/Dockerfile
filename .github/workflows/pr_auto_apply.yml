@@ -13,10 +13,10 @@ jobs:
   main:
     runs-on: [self-hosted, linux]
     steps:
-      - name: approve
+      - name: Exec approve
         uses: hmarr/auto-approve-action@v4
 
-      - name: merge
+      - name: Exec merge
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
