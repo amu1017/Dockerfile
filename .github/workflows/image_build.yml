@@ -1,0 +1,35 @@
+name: check_runner
+
+on:
+  #push:
+    #branches:
+      #- main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # ビルドジョブ
+  build:
+    # ジョブに必要な定義
+    runs-on: [self-hosted, linux]
+
+    steps:
+      - uses: actions/checkout@v4
+        name: checkout
+        with:
+          fetch-depth: 2
+
+      - name: check_diff
+        run: |
+          files=($(git diff HEAD^ --name-only|tr '\n' ' ' ))
+          for file in ${files[@]}; do
+            echo ${file}
+          done
