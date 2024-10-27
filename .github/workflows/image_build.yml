@@ -18,12 +18,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: check_diff
         run: |
-          files=($(git diff HEAD^ --name-only|tr '\n' ' ' ))
+          files=($(git diff HEAD HEAD^ --name-only|tr '\n' ' ' ))
           for file in ${files[@]}; do
             echo ${file}
           done
