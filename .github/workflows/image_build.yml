@@ -6,24 +6,18 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions: write-all
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  # ビルドジョブ
-  build:
-    # ジョブに必要な定義
+  main:
     runs-on: [self-hosted, linux]
-
     steps:
-      - uses: actions/checkout@v4
-        name: checkout
+      - name: checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
