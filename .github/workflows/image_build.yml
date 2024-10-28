@@ -25,5 +25,5 @@ jobs:
         run: |
           files=($(git diff HEAD HEAD^ --name-only|tr '\n' ' ' ))
           for file in ${files[@]}; do
-            echo ${file}
+            echo ${file} | sed -Ee '/Dockerfile/p'
           done
