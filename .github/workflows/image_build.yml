@@ -25,7 +25,7 @@ jobs:
         run: |
           files=($(git diff HEAD HEAD^ --name-only|tr '\n' ' ' ))
           for file in ${files[@]}; do
-            if [ -n $(echo ${file} | sed -nEe '/Dockerfile/p') ]; then
+            if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ]; then
               echo "Dockerfileあるよ"
               echo ${file} | sed -nEe '/Dockerfile/p'
             else
