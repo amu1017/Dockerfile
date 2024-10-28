@@ -25,8 +25,18 @@ jobs:
         run: |
           files=($(git diff HEAD HEAD^ --name-only|tr '\n' ' ' ))
           for file in ${files[@]}; do
-            #if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ] && [ -e ${file} ]; then
-            if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ]; then
-              echo "imagename is $(echo ${file} | cut -d '/' -f 1)"
+            if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ] && [ -e ${file} ]; then
+              imagename=$(echo ${file} | cut -d '/' -f 1)
+              nowdata=$(date '+%Y%m%d-%H%M')
+              echo "imagename is ${imagename}"
+              echo "nowdata   is ${nowdata}"
+              #docker build . \
+              #  -f ./Dockerfile_${imagename} \
+              #  -t img.home.xdr-s.net/${imagename}:${nowdata}
+              #docker tag \
+              #  img.home.xdr-s.net/${imagename}:${nowdata} \
+              #  img.home.xdr-s.net/${imagename}:latest
+              #docker push img.home.xdr-s.net/${imagename}:${nowdata}
+              #docker push img.home.xdr-s.net/${imagename}:latest
             fi
           done
