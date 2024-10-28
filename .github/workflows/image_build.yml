@@ -29,4 +29,5 @@ jobs:
               echo "Dockerfileあるよ"
             else
               echo "Dockerfileないよ"
+            fi
           done
