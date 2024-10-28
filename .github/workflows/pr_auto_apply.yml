@@ -1,7 +1,6 @@
 name: pr auto apply
 
-on:
-  - pull_request_target
+on: pull_request
 
 permissions: write-all
 
@@ -13,11 +12,11 @@ jobs:
   main:
     runs-on: [self-hosted, linux]
     steps:
-      - name: Exec approve
-        uses: hmarr/auto-approve-action@v4
+      #- name: Exec approve
+      #  uses: hmarr/auto-approve-action@v4
 
       - name: Exec merge
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.PRIVATE_GITHUB_ACTIONS}}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

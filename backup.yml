@@ -1,6 +1,7 @@
 name: pr auto apply
 
-on: pull_request_target
+on:
+  - pull_request_target
 
 permissions: write-all
 
@@ -19,4 +20,4 @@ jobs:
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{secrets.PRIVATE_GITHUB_ACTIONS}}
