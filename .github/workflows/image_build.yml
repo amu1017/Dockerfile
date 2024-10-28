@@ -26,6 +26,6 @@ jobs:
           files=($(git diff HEAD HEAD^ --name-only|tr '\n' ' ' ))
           for file in ${files[@]}; do
             if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ]; then
-              echo "Dockerfileあるよ"
+              echo "imagename is $(echo ${file} | cut -d '/' -f 1)"
             fi
           done
