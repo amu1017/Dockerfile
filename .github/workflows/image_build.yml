@@ -27,9 +27,5 @@ jobs:
           for file in ${files[@]}; do
             if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ]; then
               echo "Dockerfileあるよ"
-              echo ${file} | sed -nEe '/Dockerfile/p'
-            else
-              echo "Dockerfileないよ"
-              echo ${file} | sed -nEe '/Dockerfile/p'
             fi
           done
