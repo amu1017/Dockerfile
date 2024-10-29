@@ -1,0 +1,54 @@
+name: push auto pr create and merge
+
+on:
+  push:
+    branches:
+      - "feature/**"
+
+permissions: write-all
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  main:
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: pr_create
+        id: pr_create
+        run: |
+          pr_url=$( \
+            gh pr create \
+              --base main \
+              --title "push auto pr create" \
+              --body "push auto pr create" \
+              --assignee ${{ github.actor }} \
+          )
+          echo "pr_url=${pr_url}" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: pr_approve
+        id: pr_approve
+        run: |
+          gh pr review \
+            ${{ steps.pr_create.outputs.pr_url }}
+            --approve \
+            --body "push auto pr approve"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: pr_merge
+        id: pr_merge
+        run: |
+          gh pr merge \
+            ${{ steps.pr_create.outputs.pr_url }}
+            --merge \
+            --auto \
+            --body "push auto pr merge"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
