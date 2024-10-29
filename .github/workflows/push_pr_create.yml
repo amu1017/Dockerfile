@@ -3,7 +3,7 @@ name: push pr create
 on:
   push:
     branches:
-      - feature/*
+      - "feature/**"
 
 permissions: write-all
 
