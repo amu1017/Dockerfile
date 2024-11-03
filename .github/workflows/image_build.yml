@@ -17,25 +17,38 @@ jobs:
     runs-on: [self-hosted, linux]
     steps:
       - name: checkout
+        id: checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: check_diff
+      - name: docker_login
+        id: docker_login
+        uses: docker/login-action@v3
+        with:
+          registry: harbor.home.xdr-s.net
+          username: ${{ secrets.HARBOR_ID }}
+          password: ${{ secrets.HARBOR_PW }}
+
+      - name: diff_build_push
+        id: diff_build_push
         run: |
           files=($(git diff HEAD HEAD^ --name-only|tr '\n' ' ' ))
           for file in ${files[@]}; do
-            if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ] && [ -e ${file} ]; then
+            if [ -n "$(echo ${file} | sed -nEe '/Dockerfile/p')" ] && [ -e ${file} ] && [ ${#file} -gt 10 ]; then
               imagename=$(echo ${file} | cut -d '/' -f 1)
               nowdata=$(date '+%Y%m%d-%H%M')
-              regname=img.home.xdr-s.net
+              regname=harbor.home.xdr-s.net
+              pjname=swarm
               echo "imagename is ${imagename}"
               echo "nowdata   is ${nowdata}"
               pushd ${imagename}
-              docker build -t ${regname}/${imagename}:${nowdata} .
-              docker tag ${regname}/${imagename}:${nowdata} ${regname}/${imagename}:latest
-              docker push img.home.xdr-s.net/${imagename}:${nowdata}
-              docker push img.home.xdr-s.net/${imagename}:latest
+              docker builder prune -af
+              docker build -t ${regname}/$pjname}/${imagename}:${nowdata} .
+              docker tag  ${regname}/$pjname}/${imagename}:${nowdata} ${regname}/$pjname}/${imagename}:latest
+              docker push ${regname}/$pjname}/${imagename}:${nowdata}
+              docker push ${regname}/$pjname}/${imagename}:latest
+              docker builder prune -af
               popd
             fi
           done

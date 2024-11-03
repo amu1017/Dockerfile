@@ -2,8 +2,8 @@ name: push auto pr create and merge
 
 on:
   push:
-    branches:
-      - "feature/**"
+    #branches:
+    #- "feature/**"
 
 permissions: write-all
 
@@ -16,6 +16,7 @@ jobs:
     runs-on: [self-hosted, linux]
     steps:
       - name: checkout
+        id: checkout
         uses: actions/checkout@v4
 
       - name: pr_create
@@ -32,16 +33,6 @@ jobs:
           echo "pr_url=${pr_url}" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      #- name: pr_approve
-      #  id: pr_approve
-      #  run: |
-      #    gh pr review \
-      #      ${{ steps.pr_create.outputs.pr_url }} \
-      #      --approve \
-      #      --body "push auto pr approve"
-      #  env:
-      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: pr_merge
         id: pr_merge
