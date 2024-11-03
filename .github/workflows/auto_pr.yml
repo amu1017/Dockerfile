@@ -2,8 +2,8 @@ name: push auto pr create and merge
 
 on:
   push:
-    #branches:
-    #- "feature/**"
+    branches-ignore:
+      - main
 
 permissions: write-all
 
