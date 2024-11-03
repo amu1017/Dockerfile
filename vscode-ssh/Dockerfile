@@ -245,7 +245,7 @@ EOF
 RUN chmod +x /entrypoint.sh
 
 # 公開するポート
-EXPOSE 222
+EXPOSE 22
 
 # 起動時に実行するコマンド
 ENTRYPOINT ["/entrypoint.sh"]
