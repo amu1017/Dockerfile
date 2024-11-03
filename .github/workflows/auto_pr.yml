@@ -1,9 +1,10 @@
 name: push auto pr create
 
 on:
-  push:
-    branches-ignore:
-      - main
+  #push:
+  #  branches-ignore:
+  #    - main
+  workflow_dispatch:
 
 permissions: write-all
 
