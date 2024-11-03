@@ -44,10 +44,10 @@ jobs:
               echo "nowdata   is ${nowdata}"
               pushd ${imagename}
               docker builder prune -af
-              docker build -t ${regname}/$pjname}/${imagename}:${nowdata} .
-              docker tag  ${regname}/$pjname}/${imagename}:${nowdata} ${regname}/$pjname}/${imagename}:latest
-              docker push ${regname}/$pjname}/${imagename}:${nowdata}
-              docker push ${regname}/$pjname}/${imagename}:latest
+              docker build -t ${regname}/${pjname}/${imagename}:${nowdata} .
+              docker tag  ${regname}/${pjname}/${imagename}:${nowdata} ${regname}/${pjname}/${imagename}:latest
+              docker push ${regname}/${pjname}/${imagename}:${nowdata}
+              docker push ${regname}/${pjname}/${imagename}:latest
               docker builder prune -af
               popd
             fi
