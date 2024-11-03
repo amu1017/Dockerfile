@@ -1,11 +1,9 @@
 name: image build
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types:
-      - closed
   workflow_dispatch:
 
 permissions: write-all
@@ -16,7 +14,6 @@ defaults:
 
 jobs:
   main:
-    if: github.event.pull_request.merged == true
     runs-on: [self-hosted, linux]
     steps:
       - name: checkout
