@@ -34,4 +34,4 @@ jobs:
             --auto \
             --body "push auto pr merge"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PRIVATE_GITHUB_RUNNER }}
