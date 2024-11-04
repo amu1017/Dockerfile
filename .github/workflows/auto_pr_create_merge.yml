@@ -1,4 +1,4 @@
-name: push auto pr create
+name: push auto pr create and
 
 on:
   push:
