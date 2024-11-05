@@ -37,6 +37,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PRIVATE_GITHUB_RUNNER }}
 
+      #- name: pr_approve
+      #  id: pr_approve
+      #  uses: hmarr/auto-approve-action@v4
+
       - name: pr_merge
         id: pr_merge
         run: |
