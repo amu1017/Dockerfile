@@ -80,6 +80,7 @@ jobs:
         with:
           push: true
           no-cache: true
+          platforms: linux/amd64
           context: ${{ matrix.diff_parse.repo }}/${{ matrix.diff_parse.image }}
           tags: |
             ${{ env.regname }}/${{ matrix.diff_parse.repo }}/${{ matrix.diff_parse.image }}:${{ steps.nowdate.outputs.value1 }}
