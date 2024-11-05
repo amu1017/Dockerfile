@@ -5,4 +5,4 @@ FROM ubuntu:22.04
 RUN yes | unminimize
 
 # 起動時に実行するコマンド
-ENTRYPOINT ["echo 起動成功5"]
+ENTRYPOINT ["echo 起動成功11"]
