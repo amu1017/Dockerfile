@@ -58,6 +58,12 @@ jobs:
       matrix:
         diff_parse: ${{fromJson(needs.setup.outputs.diff_parse)}}
     steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: docker_login
         id: docker_login
         uses: docker/login-action@v3
@@ -71,8 +77,8 @@ jobs:
         run: |
           nowdata=$(date '+%Y%m%d-%H%M')
           regname=harbor.home.xdr-s.net
-          reponame=$(echo ${matrix.diff_parse.repo})
-          imagename=$(echo ${matrix.diff_parse.image})
+          reponame=$(echo ${{ matrix.diff_parse.repo }})
+          imagename=$(echo ${{ matrix.diff_parse.image }})
           echo "build filename is ${reponame}/${imagename}/Dockerfile"
           echo "build imagename is ${regname}/${reponame}:***"
           pushd ${reponame}/${imagename}
