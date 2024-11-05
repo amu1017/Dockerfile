@@ -24,14 +24,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: docker_login
-        id: docker_login
-        uses: docker/login-action@v3
-        with:
-          registry: harbor.home.xdr-s.net
-          username: ${{ secrets.HARBOR_ID }}
-          password: ${{ secrets.HARBOR_PW }}
-
       - name: diff_parse
         id: diff_parse
         run: |
@@ -80,13 +72,13 @@ jobs:
           reponame=$(echo ${{ matrix.diff_parse.repo }})
           imagename=$(echo ${{ matrix.diff_parse.image }})
           echo "build filename is ${reponame}/${imagename}/Dockerfile"
-          echo "build imagename is ${regname}/${reponame}:***"
+          echo "build imagename is ${regname}/${reponame}/${imagename}:***"
           pushd ${reponame}/${imagename}
-          #docker builder prune -af
-          #docker build -t ${regname}/${reponame}/${imagename}:${nowdata} .
-          #docker tag  ${regname}/${reponame}/${imagename}:${nowdata} \
-          #            ${regname}/${reponame}/${imagename}:latest
-          #docker push ${regname}/${reponame}/${imagename}:${nowdata}
-          #docker push ${regname}/${reponame}/${imagename}:latest
-          #docker builder prune -af
+          docker builder prune -af
+          docker build -t ${regname}/${reponame}/${imagename}:${nowdata} .
+          docker tag  ${regname}/${reponame}/${imagename}:${nowdata} \
+                      ${regname}/${reponame}/${imagename}:latest
+          docker push ${regname}/${reponame}/${imagename}:${nowdata}
+          docker push ${regname}/${reponame}/${imagename}:latest
+          docker builder prune -af
           popd
