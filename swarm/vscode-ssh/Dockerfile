@@ -8,10 +8,11 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 
 # 通常版Ubuntuへ復元
-RUN yes | unminimize
+RUN yes | unminimize \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # OSパッケージインストール -基本編-
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     vim \
     less \
     sudo \
@@ -28,20 +29,22 @@ RUN apt-get update && apt-get install -y \
     dos2unix \
     sysstat \
     binutils \
-    lsb-release
+    lsb-release \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # OSパッケージインストール -パッケージ管理編-
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     curl \
     git \
     wget \
     gnupg \
     apt-utils \
     software-properties-common \
-    apt-transport-https
+    apt-transport-https \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # OSパッケージインストール -ネットワーク編-
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     iputils-tracepath \
     iputils-ping \
     ca-certificates \
@@ -57,10 +60,11 @@ RUN apt-get update && apt-get install -y \
     cifs-utils \
     openssh-client \
     openssh-server \
-    lynx
+    lynx \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # OSパッケージインストール -フォント編-
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     build-essential \
     fontconfig \
     fonts-noto-cjk \
@@ -73,68 +77,83 @@ RUN apt-get update && apt-get install -y \
     fonts-ipafont-gothic \
     fonts-ipafont-mincho \
     fonts-ipamj-mincho \
- && fc-cache -r
+    && fc-cache -r \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # OSパッケージインストール -python編-
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     build-essential \
     python3 \
     python3-pip \
     python3-dev \
-    python-is-python3
+    python-is-python3 \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # OSパッケージインストール -Go編-
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     golang \
-    delve
+    delve \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # Pwshインストール
 RUN wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb \
- && dpkg -i ./packages-microsoft-prod.deb \
- && rm -rf ./packages-microsoft-prod.deb \
- && apt-get update && apt-get install -y powershell
+    && dpkg -i ./packages-microsoft-prod.deb \
+    && rm -rf ./packages-microsoft-prod.deb \
+    && apt update && apt install -y powershell \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # AWS CLIインストール
 RUN wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip \
- && unzip ./awscli-exe-linux-x86_64.zip \
- && ./aws/install -i /usr/local/aws-cli -b /usr/local/bin \
- && rm -rf ./awscli-exe-linux-x86_64.zip ./aws
+    && unzip ./awscli-exe-linux-x86_64.zip \
+    && ./aws/install -i /usr/local/aws-cli -b /usr/local/bin \
+    && rm -rf ./awscli-exe-linux-x86_64.zip ./aws
 
 # Hugoインストール
 RUN wget https://github.com/gohugoio/hugo/releases/download/v0.136.4/hugo_extended_0.136.4_linux-amd64.deb \
- && dpkg -i ./hugo_extended_0.136.4_linux-amd64.deb \
- && rm -rf ./hugo_extended_0.136.4_linux-amd64.deb
+    && dpkg -i ./hugo_extended_0.136.4_linux-amd64.deb \
+    && rm -rf ./hugo_extended_0.136.4_linux-amd64.deb
 
 # Github CLIインストール
 RUN mkdir -p -m 755 /etc/apt/keyrings \
- && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
- && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
- && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
- && apt-get update && apt-get install -y gh \
- && echo "eval \"\$(gh completion -s bash)\"" > /etc/profile.d/githubcli-completion.sh
+    && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && apt update && apt install -y gh \
+    && echo "eval \"\$(gh completion -s bash)\"" > /etc/profile.d/githubcli-completion.sh \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # Terraform インストール
 RUN wget -qO- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null  \
- && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list > /dev/null \
- && apt-get update && apt-get install -y terraform
+    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list > /dev/null \
+    && apt update && apt install -y terraform \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
+
+# Docker CLIインストール
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+    && wget -qO- https://download.docker.com/linux/ubuntu/gpg | tee /etc/apt/keyrings/docker.asc > /dev/null \
+    && chmod a+r /etc/apt/keyrings/docker.asc \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
+    && apt update && apt install -y --no-install-recommends docker-ce-cli docker-buildx-plugin \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # Firpleフォントインストール
 RUN wget https://github.com/negset/Firple/releases/download/4.000/Firple.zip \
- && unzip ./Firple.zip  \
- && wget https://github.com/negset/Firple/releases/download/4.000/FirpleSlim.zip \
- && unzip ./FirpleSlim.zip  \
- && cp -vf ./Firple*.ttf /usr/local/share/fonts/ \
- && rm -rf ./Firple* \
- && fc-cache -r
+    && unzip ./Firple.zip  \
+    && wget https://github.com/negset/Firple/releases/download/4.000/FirpleSlim.zip \
+    && unzip ./FirpleSlim.zip  \
+    && cp -vf ./Firple*.ttf /usr/local/share/fonts/ \
+    && rm -rf ./Firple* \
+    && fc-cache -r
 
 # pandocインストール
 RUN wget https://github.com/jgm/pandoc/releases/download/3.2.1/pandoc-3.2.1-linux-amd64.tar.gz \
- && tar xvzf ./pandoc-3.2.1-linux-amd64.tar.gz --strip-components 1 -C /usr/local/ \
- && rm -rf ./pandoc-3.2.1-linux-amd64.tar.gz
+    && tar xvzf ./pandoc-3.2.1-linux-amd64.tar.gz --strip-components 1 -C /usr/local/ \
+    && rm -rf ./pandoc-3.2.1-linux-amd64.tar.gz
 
 # wkhtmltopdfインストール
-RUN apt-get update && apt-get install -y \
-    wkhtmltopdf
+RUN apt update && apt install -y \
+    wkhtmltopdf \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # pipインストール -common編-
 COPY <<-EOF pip-common
@@ -147,7 +166,7 @@ openpyxl
 Pillow
 EOF
 RUN pip install -r pip-common \
- && rm -rf pip-common
+    && rm -rf pip-common
 
 # pipインストール -sphinx編-
 COPY <<-EOF pip-sphinx
@@ -160,7 +179,7 @@ myst-parser
 rst-to-myst
 EOF
 RUN pip install -r pip-sphinx \
- && rm -rf pip-sphinx
+    && rm -rf pip-sphinx
 
 # pipインストール -Cfn-lint編-
 COPY <<-EOF pip-cfn
@@ -168,45 +187,44 @@ cfn-lint
 pydot
 EOF
 RUN pip install -r pip-cfn \
- && rm -rf pip-cfn
+    && rm -rf pip-cfn
 
 # ============OS設定============
 USER root
 
 # OS日本語設定
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     language-pack-ja-base \
     language-pack-ja \
     locales \
     tzdata \
- && update-locale LANG=ja_JP.UTF8 \
- && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
- && dpkg-reconfigure --frontend noninteractive tzdata
+    && update-locale LANG=ja_JP.UTF8 \
+    && ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # sudo可能な一般ユーザー作成
 RUN groupadd -g 9999 group \
- && useradd -m -s /bin/bash -u 9999 -g 9999 -G sudo user \
- && echo "user:P@ssw0rd" | chpasswd \
- && echo "user   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    && useradd -m -s /bin/bash -u 9999 -g 9999 -G sudo user \
+    && echo "user:P@ssw0rd" | chpasswd \
+    && echo "user   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # SSHサーバーの準備
 RUN mkdir -p /var/run/sshd \
- && chmod 755 /var/run/sshd \
- && chown root:root /var/run/sshd \
- && ssh-keygen -A
+    && chmod 755 /var/run/sshd \
+    && chown root:root /var/run/sshd \
+    && ssh-keygen -A
 
 # ユーザー用のSSHディレクトリ作成
 RUN mkdir /home/user/.ssh/ \
- && chmod 0700 /home/user/.ssh/ \
- && chown user:group /home/user/.ssh/
+    && chmod 0700 /home/user/.ssh/ \
+    && chown user:group /home/user/.ssh/
 
 
 # ============起動設定============
 # OSパッケージの不要ファイル掃除
-RUN apt-get upgrade -y \
- && apt-get autoremove -y \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+RUN apt upgrade -y \
+    && apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # 起動スクリプトを生成する。
 COPY <<-"EOF" /entrypoint.sh
@@ -237,9 +255,12 @@ if [ -n "${SSH_PUBKEY}" ]; then
     chmod 600 /home/user/.ssh/authorized_keys
     chown "${PJ_UID}:${PJ_GID}" /home/user/.ssh/authorized_keys
 fi
-ln -s /projects /home/user/projects
+unlink /home/user/projects && ln -s /projects /home/user/projects
+
+trap 'echo catch 130 INT;  kill -9 $!; exit 130' INT
+trap 'echo catch 143 TERM; kill -9 $!; exit 143' TERM
 echo "start sshd"
-/usr/sbin/sshd -D
+/usr/sbin/sshd -D & wait $!
 # ----------------End-----------------
 EOF
 RUN chmod +x /entrypoint.sh
@@ -249,6 +270,3 @@ EXPOSE 22
 
 # 起動時に実行するコマンド
 ENTRYPOINT ["/entrypoint.sh"]
-
-
-

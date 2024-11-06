@@ -1,4 +1,4 @@
-name: push auto pr create and
+name: push auto pr create and merge
 
 on:
   push:
