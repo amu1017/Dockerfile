@@ -230,11 +230,21 @@ RUN apt upgrade -y \
 COPY <<-"EOF" /entrypoint.sh
 #!/bin/bash
 # ----------------Start---------------
+DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
 PJ_UID=$(stat -c '%u' /projects)
 PJ_GID=$(stat -c '%g' /projects)
 CHANGE_PW=$(cat /run/secrets/CHANGE_PW)
 SSH_PUBKEY=$(cat /run/secrets/SSH_PUBKEY)
 
+if grep -q "docker" /etc/group; then
+    echo "doceker groupmod"
+    groupmod -g "${DOCKER_GID}" "docker"
+else
+    echo "docker groupadd"
+    groupadd -g "${DOCKER_GID}" "docker"
+    echo "docker usermod"
+    usermod -aG docker user
+fi
 if [ "${PJ_GID}" -ne 0 ] && [ "${PJ_GID}" -ne 9999 ]; then
     echo "set gid ${PJ_GID}"
     groupmod -g "${PJ_GID}" "group"
