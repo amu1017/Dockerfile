@@ -265,7 +265,7 @@ if [ -n "${SSH_PUBKEY}" ]; then
     chmod 600 /home/user/.ssh/authorized_keys
     chown "${PJ_UID}:${PJ_GID}" /home/user/.ssh/authorized_keys
 fi
-unlink /home/user/projects && ln -s /projects /home/user/projects
+ln -s /projects /home/user/projects
 
 trap 'echo catch 130 INT;  kill -9 $!; exit 130' INT
 trap 'echo catch 143 TERM; kill -9 $!; exit 143' TERM
