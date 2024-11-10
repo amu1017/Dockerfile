@@ -35,15 +35,3 @@ $config['smtp_conn_options'] = [
     ],
 ];
 EOF
-
-# プラグインの設定など
-RUN composer \
-    --working-dir=/usr/src/roundcubemail/ \
-    --prefer-dist \
-    --prefer-stable \
-    --update-no-dev \
-    --no-interaction \
-    --optimize-autoloader \
-    require \
-    boressoft/ident_switch
-
