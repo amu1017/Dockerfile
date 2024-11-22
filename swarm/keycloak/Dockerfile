@@ -3,7 +3,7 @@ ARG DIST=amazonlinux
 
 FROM amazoncorretto:17 AS base
 
-ARG KEYCLOAK_VERSION 26.0.6
+ARG KEYCLOAK_VERSION=26.0.6
 ARG KEYCLOAK_DIST=https://github.com/keycloak/keycloak/releases/download/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz
 
 ADD $KEYCLOAK_DIST /tmp/keycloak/
