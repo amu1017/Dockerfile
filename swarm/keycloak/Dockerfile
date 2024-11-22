@@ -44,7 +44,7 @@ if [ -f "/run/secrets/kc_pw" ]   ;then KEYCLOAK_ADMIN_PASSWORD=$(cat /run/secret
 trap 'echo catch 130 INT;  kill -9 $!; exit 130' INT
 trap 'echo catch 143 TERM; kill -9 $!; exit 143' TERM
 echo "start keycloak"
-/opt/keycloak/bin/kc.sh & wait $!
+/opt/keycloak/bin/kc.sh $1 & wait $!
 # ----------------End-----------------
 EOF
 RUN chmod +x /entrypoint.sh
